@@ -23,8 +23,8 @@
 #include "mpu9250.h"
 #include "ak8963.h"
 
-#define I2C_MASTER_SCL_IO 2      /*!< gpio number for I2C master clock */
-#define I2C_MASTER_SDA_IO 14     /*!< gpio number for I2C master data  */
+#define I2C_MASTER_SCL_IO 22      /*!< gpio number for I2C master clock */
+#define I2C_MASTER_SDA_IO 21     /*!< gpio number for I2C master data  */
 #define I2C_MASTER_NUM I2C_NUM_0 /*!< I2C port number for master dev */
 
 static const char *TAG = "mpu9250";
@@ -206,7 +206,7 @@ esp_err_t get_accel(vector_t *v)
   return ESP_OK;
 }
 
-void align_gryo(uint8_t bytes[6], vector_t *v)
+void align_gyro(uint8_t bytes[6], vector_t *v)
 {
   int16_t xi = BYTE_2_INT_BE(bytes, 0);
   int16_t yi = BYTE_2_INT_BE(bytes, 2);
@@ -227,7 +227,7 @@ esp_err_t get_gyro(vector_t *v)
     return ret;
   }
 
-  align_gryo(bytes, v);
+  align_gyro(bytes, v);
 
   return ESP_OK;
 }
@@ -248,7 +248,7 @@ esp_err_t get_accel_gyro(vector_t *va, vector_t *vg)
   // Skip Temperature - bytes 6:7
 
   // Gyroscope - bytes 9:13
-  align_gryo(&bytes[8], vg);
+  align_gyro(&bytes[8], vg);
 
   return ESP_OK;
 }
