@@ -30,6 +30,7 @@
 #include "esp_task_wdt.h"
 
 #include "driver/i2c.h"
+#include "driver/uart.h"
 
 #include "../components/ahrs/MadgwickAHRS.h"
 #include "../components/mpu9250/mpu9250.h"
@@ -85,7 +86,7 @@ static void transform_mag(vector_t *v)
 
 void run_imu(void)
 {
-
+  ESP_LOGI(TAG, "HELLO");
   i2c_mpu9250_init(&cal);
   MadgwickAHRSinit(SAMPLE_FREQ_Hz, 0.8);
 
@@ -115,7 +116,8 @@ void run_imu(void)
 
       float heading, pitch, roll;
       MadgwickGetEulerAnglesDegrees(&heading, &pitch, &roll);
-      ESP_LOGI(TAG, "heading: %2.3f°, pitch: %2.3f°, roll: %2.3f°, Temp %2.3f°C", heading, pitch, roll, temp);
+      printf("FSR X X X X X X X X heading: %2.3f pitch: %2.3f roll: %2.3f Temp %2.3fC h h h h\r\n", heading, pitch, roll, temp);
+      // ESP_LOGI(TAG, "FSR X X X X X X X X heading: %2.3f pitch: %2.3f roll: %2.3f Temp %2.3fC h h h h", heading, pitch, roll, temp);
 
       // Make the WDT happy
       esp_task_wdt_reset();
@@ -145,6 +147,8 @@ static void imu_task(void *arg)
 
 void app_main(void)
 {
+  uart_set_baudrate(UART_NUM_0, 115200);
+
   //start i2c task
   xTaskCreate(imu_task, "imu_task", 2048, NULL, 10, NULL);
 }
