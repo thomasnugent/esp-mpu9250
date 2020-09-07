@@ -42,13 +42,13 @@ static const char *TAG = "main";
 #define I2C_MASTER_NUM I2C_NUM_0 /*!< I2C port number for master dev */
 
 calibration_t cal = {
-    .mag_offset = {.x = 25.183594, .y = 57.519531, .z = -62.648438},
-    .mag_scale = {.x = 1.513449, .y = 1.557811, .z = 1.434039},
-    .accel_offset = {.x = 0.020900, .y = 0.014688, .z = -0.002580},
-    .accel_scale_lo = {.x = -0.992052, .y = -0.990010, .z = -1.011147},
-    .accel_scale_hi = {.x = 1.013558, .y = 1.011903, .z = 1.019645},
-
-    .gyro_bias_offset = {.x = 0.303956, .y = -1.049768, .z = -0.403782}};
+    .mag_offset = {.x = 8.787285, .y = 108.107750, .z = -165.139145},
+    .mag_scale = {.x = 1.664211, .y = 1.407706, .z = 1.451929},
+    .accel_offset = {.x = 0.273095, .y = -0.196444, .z = -0.230595},
+    .accel_scale_lo = {.x = 1.097297, .y = 0.925665, .z = 0.907561},
+    .accel_scale_hi = {.x = -0.876847, .y = -1.062055, .z = -1.084525},
+    .gyro_bias_offset = {.x = 2.616736, .y = -1.975317, .z = -1.188345}
+};
 
 /**
  * Transformation:
@@ -99,14 +99,14 @@ void run_imu(void)
     ESP_ERROR_CHECK(get_accel_gyro_mag(&va, &vg, &vm));
 
     // Transform these values to the orientation of our device.
-    transform_accel_gyro(&va);
-    transform_accel_gyro(&vg);
-    transform_mag(&vm);
+    // transform_accel_gyro(&va);
+    // transform_accel_gyro(&vg);
+    // transform_mag(&vm);
 
     // Apply the AHRS algorithm
-    MadgwickAHRSupdate(DEG2RAD(vg.x), DEG2RAD(vg.y), DEG2RAD(vg.z),
-                       va.x, va.y, va.z,
-                       vm.x, vm.y, vm.z);
+    // MadgwickAHRSupdate(DEG2RAD(vg.x), DEG2RAD(vg.y), DEG2RAD(vg.z),
+    //                    va.x, va.y, va.z,
+    //                    vm.x, vm.y, vm.z);
 
     // Print the data out every 10 items
     if (i++ % 10 == 0)
@@ -114,9 +114,16 @@ void run_imu(void)
       float temp;
       ESP_ERROR_CHECK(get_temperature_celsius(&temp));
 
-      float heading, pitch, roll;
-      MadgwickGetEulerAnglesDegrees(&heading, &pitch, &roll);
-      printf("FSR X X X X X X X X heading: %2.3f pitch: %2.3f roll: %2.3f Temp %2.3fC h h h h\r\n", heading, pitch, roll, temp);
+      // float heading, pitch, roll;
+      // MadgwickGetEulerAnglesDegrees(&heading, &pitch, &roll);
+
+      printf("gyro_x: %5.2f, gyro_y: %5.2f, gyro_z: %5.2f "
+             "acc_x: %5.2f, acc_y: %5.2f, acc_z: %5.2f "
+             "mag_x: %5.2f, mag_y: %5.2f, mag_z: %5.2f temp: %5.2fC\n"
+             vg.x, vg.y, vg.z,
+             va.x, va.y, va.z,
+             vm.x, vm.y, vm.z, temp);
+      // printf("FSR X X X X X X X X heading: %2.3f pitch: %2.3f roll: %2.3f Temp %2.3fC h h h h\r\n", heading, pitch, roll, temp);
       // ESP_LOGI(TAG, "FSR X X X X X X X X heading: %2.3f pitch: %2.3f roll: %2.3f Temp %2.3fC h h h h", heading, pitch, roll, temp);
 
       // Make the WDT happy
