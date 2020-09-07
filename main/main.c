@@ -41,14 +41,14 @@ static const char *TAG = "main";
 
 #define I2C_MASTER_NUM I2C_NUM_0 /*!< I2C port number for master dev */
 
+// Default cal!
 calibration_t cal = {
-    .mag_offset = {.x = 8.787285, .y = 108.107750, .z = -165.139145},
-    .mag_scale = {.x = 1.664211, .y = 1.407706, .z = 1.451929},
-    .accel_offset = {.x = 0.273095, .y = -0.196444, .z = -0.230595},
-    .accel_scale_lo = {.x = 1.097297, .y = 0.925665, .z = 0.907561},
-    .accel_scale_hi = {.x = -0.876847, .y = -1.062055, .z = -1.084525},
-    .gyro_bias_offset = {.x = 2.616736, .y = -1.975317, .z = -1.188345}
-};
+    .mag_offset = {.x = 0.0, .y = 0.0, .z = 0.0},
+    .mag_scale = {.x = 1.0, .y = 1.0, .z = 1.0},
+    .accel_offset = {.x = 0.0, .y = 0.0, .z = 0.0},
+    .accel_scale_lo = {.x = -1.0, .y = -1.0, .z = -1.0},
+    .accel_scale_hi = {.x = 1.0, .y = 1.0, .z = 1.0},
+    .gyro_bias_offset = {.x = 0.0, .y = 0.0, .z = 0.0}};
 
 /**
  * Transformation:
@@ -103,7 +103,7 @@ void run_imu(void)
     // transform_accel_gyro(&vg);
     // transform_mag(&vm);
 
-    // Apply the AHRS algorithm
+    // // Apply the AHRS algorithm
     // MadgwickAHRSupdate(DEG2RAD(vg.x), DEG2RAD(vg.y), DEG2RAD(vg.z),
     //                    va.x, va.y, va.z,
     //                    vm.x, vm.y, vm.z);
@@ -116,7 +116,6 @@ void run_imu(void)
 
       // float heading, pitch, roll;
       // MadgwickGetEulerAnglesDegrees(&heading, &pitch, &roll);
-
       printf("gx: %9.2f gy: %9.2f gz: %9.2f "
              "ax: %9.2f ay: %9.2f az: %9.2f "
              "mx: %9.2f my: %9.2f mz: %9.2f temp: %9.2fC\n",

@@ -184,9 +184,9 @@ void align_accel(uint8_t bytes[6], vector_t *v)
   int16_t yi = BYTE_2_INT_BE(bytes, 2);
   int16_t zi = BYTE_2_INT_BE(bytes, 4);
 
-  v->x = (float)xi;
-  v->y = (float)yi;
-  v->z = (float)zi;
+  v->x = scale_accel((float)xi, cal->accel_offset.x, cal->accel_scale_lo.x, cal->accel_scale_hi.x);
+  v->y = scale_accel((float)yi, cal->accel_offset.y, cal->accel_scale_lo.y, cal->accel_scale_hi.y);
+  v->z = scale_accel((float)zi, cal->accel_offset.z, cal->accel_scale_lo.z, cal->accel_scale_hi.z);
 }
 
 esp_err_t get_accel(vector_t *v)
@@ -212,9 +212,9 @@ void align_gyro(uint8_t bytes[6], vector_t *v)
   int16_t yi = BYTE_2_INT_BE(bytes, 2);
   int16_t zi = BYTE_2_INT_BE(bytes, 4);
 
-  v->x = (float)xi;
-  v->y = (float)yi;
-  v->z = (float)zi;
+  v->x = (float)xi * gyro_inv_scale + cal->gyro_bias_offset.x;
+  v->y = (float)yi * gyro_inv_scale + cal->gyro_bias_offset.y;
+  v->z = (float)zi * gyro_inv_scale + cal->gyro_bias_offset.z;
 }
 
 esp_err_t get_gyro(vector_t *v)

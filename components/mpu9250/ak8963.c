@@ -132,10 +132,9 @@ esp_err_t ak8963_get_mag(vector_t *v)
   float yi = (float)BYTE_2_INT_LE(bytes, 2);
   float zi = (float)BYTE_2_INT_LE(bytes, 4);
 
-  // TODO not sure if I should keep in ASA scalars
-  v->x = (xi * asa.x);
-  v->y = (yi * asa.y);
-  v->z = (zi * asa.z);
+  v->x = (xi * asa.x - cal->mag_offset.x) * cal->mag_scale.x;
+  v->y = (yi * asa.y - cal->mag_offset.y) * cal->mag_scale.y;
+  v->z = (zi * asa.z - cal->mag_offset.z) * cal->mag_scale.z;
   // ESP_LOGW(TAG, "mag     -> %0.4f %0.4f %0.4f", v->x, v->y, v->z);
 
   return ESP_OK;
