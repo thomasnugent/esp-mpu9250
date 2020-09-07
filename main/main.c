@@ -117,9 +117,9 @@ void run_imu(void)
       // float heading, pitch, roll;
       // MadgwickGetEulerAnglesDegrees(&heading, &pitch, &roll);
 
-      printf("gyro_x: %5.2f, gyro_y: %5.2f, gyro_z: %5.2f "
-             "acc_x: %5.2f, acc_y: %5.2f, acc_z: %5.2f "
-             "mag_x: %5.2f, mag_y: %5.2f, mag_z: %5.2f temp: %5.2fC\n"
+      printf("gx: %9.2f gy: %9.2f gz: %9.2f "
+             "ax: %9.2f ay: %9.2f az: %9.2f "
+             "mx: %9.2f my: %9.2f mz: %9.2f temp: %9.2fC\n",
              vg.x, vg.y, vg.z,
              va.x, va.y, va.z,
              vm.x, vm.y, vm.z, temp);
